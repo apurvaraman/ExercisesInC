@@ -146,25 +146,36 @@ character at a time.  This optimization is made easier if the length of the stri
 
 
 
-## Chapter 6
+## Chapter 6 (complete)
 
 
 ### Memory management
 
 1) Which memory management functions would you expect to take constant time?  Which ones take time proportional to the size of the allocated chunk?
 
+free seems like the only one that would take constant time since it just deallocates the pointer to the chunk, and since it is fast regardless of the number of free chunks, this seems to be the case. calloc is dependent on chunk size as well as the number of free chunks. (malloc does not usually depend on the size of the chunk. realloc can be fast if the new size is smaller than the current size, so in that way it is dependent on the size of the chunk but probably isn't proportional)
+
 2) For each of the following memory errors, give an example of something that might go wrong:
 
 a) Reading from unallocated memory.
 
+Reads a value from whatever is stored at that memory location.
+
 b) Writing to unallocated memory.
+
+A bad value gets written, but you won't know it's an issue until it's read, which could be much later.
 
 c) Reading from a freed chunk.
 
+This is similar to reading from unallocated memory.
+
 d) Writing to a freed chunk.
+
+This is similar to writing to unallocated memory.
 
 e) Failing to free a chunk that is no longer needed.
 
+Memory leak, could lead to running out of available memory.
 
 3) Run
 
@@ -173,7 +184,11 @@ e) Failing to free a chunk that is no longer needed.
 to see a list of processes sorted by RSS, which is "resident set size", the amount of physical
 memory a process has.  Which processes are using the most memory?
 
+Processes launched from atom and firefox.
+
 4) What's wrong with allocating a large number of small chunks?  What can you do to mitigate the problem?
+
+malloc isn't space efficient because there is an overhead associated with the tags and pointers. Allocating them in arrays may be more efficient.
 
 If you want to know more about how malloc works, read
 [Doug Lea's paper about dlmalloc](http://gee.cs.oswego.edu/dl/html/malloc.html)
