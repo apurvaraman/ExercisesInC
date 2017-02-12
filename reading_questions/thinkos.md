@@ -66,34 +66,68 @@ Daemons run in the background and perform OS services.
 ## Chapter 3
 
 
-### Virtual memory
+### Virtual memory (Completed)
 
 1) The Georgian alphabet has 33 letters.  How many bit are needed to specify a letter?
+
+6 bits (6b100001).
 
 2) In the UTF-16 character encoding, the binary representation of a character can take up to 32 bits.  
 Ignoring the details of the encoding scheme, how many different characters can be represented?
 
+2^32 (32d4294967296)
+
 3) What is the difference between "memory" and "storage" as defined in Think OS?
+
+RAM is referred to as memory and HDD/SSD is referred to as storage.
 
 4) What is the difference between a GiB and a GB?  What is the percentage difference in their sizes?
 
+GiB is 2^30 bytes and GB is 10^9 bytes. A GiB is about 7.374% larger than a GB.
+
 5) How does the virtual memory system help isolate processes from each other?
+
+It employs memory protection by allocating different parts of the physical address space to each process, regardless of whether the same virtual addresses are used because it is done on a per-process basis.
 
 6) Why do you think the stack and the heap are usually located at opposite ends of the address space?
 
+The stack and heap are both things that we want to be able to expand, and there are some situations where we allocate a lot of stack memory and not much heap and vice versa. It makes sense to have them grow in opposite directions to minimize the chance that they interfere with each other.
+
 7) What Python data structure would you use to represent a sparse array?
+
+dict, since it is an unordered set of key-value pairs.
 
 8) What is a context switch?
 
+A context switch is when an OS interrupts a running process, saves the state, and then starts another process.
+
 In this directory, you should find a subdirectory named `aspace` that contains `aspace.c`.  Run it on your computer and compare your results to mine.
+
+Your results:
+Address of main is   0x      40057c
+Address of global is 0x      60104c
+Address of local is  0x7fffd26139c4
+Address of p is      0x     1c3b010
+
+My results:
+Address of main is 0x40057d
+Address of global is 0x60104c
+Address of local is 0x7ffe119a47d4
+Address of p is 0xb68010
+
 
 1) Add a second call to `malloc` and check whether the heap on your system grows up (toward larger addresses).  
 
+The addresses increased, so it grows up.
+
 2) Add a function that prints the address of a local variable, and check whether the stack grows down.  
+
+The addresses decreased, so it grows down.
 
 3) Choose a random number between 1 and 32, and allocate two chunks with that size.  
 How much space is there between them?  Hint: Google knows how to subtract hexadecimal numbers.
 
+32 bytes.
 
 ## Chapter 4
 
@@ -103,19 +137,34 @@ How much space is there between them?  Hint: Google knows how to subtract hexade
 1) What abstractions do file systems provide?  Give an example of something that is logically
 true about files systems but not true of their implementations.
 
+The file system abstraction models storage as a persistent mapping between a file name and a series of bytes. The OS translates byte-based operations (which is how the file system works logically) into blocks (which is how it is implemented).
+
 2) What information do you imagine is stored in an `OpenFileTableEntry`?
 
+It should contain a read/write flag, a position, a pointer to the memory, and possibly an offset to deal with blocks.
+
 3) What are some of the ways operating systems deal with the relatively slow performance of persistent storage?
+
+Caching and good cache replacement policies, prefetching, block transfers, and buffering.
 
 4) Suppose your program writes a file and prints a message indicating that it is done writing.  
 Then a power cut crashes your computer.  After you restore power and reboot the computer, you find that the
 file you wrote is not there.  What happened?
 
+The value was likely saved in a buffer, which did not persist, before it could be written to persistent memory.
+
 5) Can you think of one advantage of a File Allocation Table over a UNIX inode?  Or an advantage of a inode over a FAT?
+
+A FAT seems like a more direct representation of the memory on the disk, and there seems to be less overhead for the metadata and other information being stored.
+I think with using inodes you can change a file and a process already using it will be unaffected.
 
 6) What is overhead?  What is fragmentation?
 
+Space overhead is the amount of space that needs to be allocated. Fragmentation is when some memory is being left unused (either whole or partial blocks).
+
 7) Why is the "everything is a file" principle a good idea?  Why might it be a bad idea?
+
+The "everything is a file" principle is useful because streams are useful in cases like using piping and network communications. I'm not sure where it might be not useful, unless there is some additional overhead to treating everything like something that can be read/written to.
 
 If you would like to learn more about file systems, a good next step is to learn about journaling file systems.  
 Start with [this Wikipedia article](https://en.wikipedia.org/wiki/Journaling_file_system), then
