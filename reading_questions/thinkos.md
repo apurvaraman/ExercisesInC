@@ -132,7 +132,7 @@ How much space is there between them?  Hint: Google knows how to subtract hexade
 ## Chapter 4
 
 
-### Files and file systems
+### Files and file systems (Completed)
 
 1) What abstractions do file systems provide?  Give an example of something that is logically
 true about files systems but not true of their implementations.
