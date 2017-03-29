@@ -17,7 +17,7 @@ typedef struct node {
 
 
 /* Makes a new node structure.
- * 
+ *
  * val: value to store in the node.
  * next: pointer to the next node
  *
@@ -32,7 +32,7 @@ Node *make_node(int val, Node *next) {
 
 
 /* Prints the values in a list.
- * 
+ *
  * list: pointer to pointer to Node
  */
 void print_list(Node **list) {
@@ -48,29 +48,36 @@ void print_list(Node **list) {
 
 
 /* Removes and returns the first element of a list.
- * 
+ *
  * list: pointer to pointer to Node
  *
  * returns: int or -1 if the list is empty
  */
 int pop(Node **list) {
-    // FILL THIS IN!
-    return 0;
+    Node* current = *list;
+    if (current == NULL){
+      return -1;
+    }
+    int head = current->val;
+    **list = *(current->next);
+
+    return head;
 }
 
 
 /* Adds a new element to the beginning of the list.
- * 
+ *
  * list: pointer to pointer to Node
  * val: value to add
  */
 void push(Node **list, int val) {
-    // FILL THIS IN!
+    Node *new_head = make_node(val, *list);
+    *list = new_head;
 }
 
 
 /* Removes the first element with the given value
- * 
+ *
  * Frees the removed node.
  *
  * list: pointer to pointer to Node
@@ -79,19 +86,46 @@ void push(Node **list, int val) {
  * returns: number of nodes removed
  */
 int remove_by_value(Node **list, int val) {
-    // FILL THIS IN!
-    return 0;
-}
+  Node *current = *list;
+  int removed_nodes = 0;
 
+  while (current->next != NULL) {
+      if (current->next->val==val) {
+          Node* prev_node = (current->next);
+
+          if (current->next->next == NULL) {
+              current->next = NULL;
+              break;
+          } else {
+              *(current->next) = *current->next->next;
+          }
+          removed_nodes++;
+          free(prev_node);
+      }
+      current = current->next;
+  }
+
+  return removed_nodes;
+}
 
 /* Reverses the elements of the list.
  *
  * Does not allocate or free nodes.
- * 
+ *
  * list: pointer to pointer to Node
  */
 void reverse(Node **list) {
-    // FILL THIS IN!
+  Node *current = *list;
+  Node *back = NULL;
+  Node *next = NULL;
+
+  while (current!=NULL) {
+    next = current->next;
+    current->next = back;
+    back = current;
+    current = next;
+  }
+  *list = back;
 }
 
 
